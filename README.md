@@ -26,4 +26,4 @@ This is maven project and the configuration is in the `pom.xml` file.
 		$java -jar target/statementProcessor-1.0-SNAPSHOT.jar
 			
 ## API Documentation
-All API endpoints information provided by Swagger.[http://localhost:8080/swagger-ui.html]
+All API endpoints information provided by Swagger from [ localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
