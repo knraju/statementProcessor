@@ -1,7 +1,7 @@
 # Customer Statement Validation
    
 
-### /statementProcessor
+### statementProcessor
 The code implementing the logic for validating the customer transactions. The following technologies are in use for coding and hosting of the application:
 
 * Spring boot

@@ -1,10 +1,9 @@
 package com.rabo.customer.rest;
 
 
-import com.rabo.customer.dto.Transaction;
 import com.rabo.customer.dto.RaboResponse;
+import com.rabo.customer.dto.Transaction;
 import com.rabo.customer.service.StatementService;
-import com.rabo.customer.service.StatementServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

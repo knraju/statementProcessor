@@ -1,6 +1,10 @@
 package com.rabo.customer.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -22,12 +26,5 @@ public class Transaction {
     private BigDecimal mutation;
     @NotNull(message = "endBalance should not be null")
     private BigDecimal endBalance;
-
-    public boolean validEndBalance() {
-        System.out.println(this.getEndBalance() +" - " + this.getStartBalance() +" !="+ this.getMutation());
-        System.out.println(this.getEndBalance().subtract(this.getStartBalance()));
-        System.out.println(this.getEndBalance().subtract(this.getStartBalance()).compareTo(this.getMutation()));
-        return this.getEndBalance().subtract(this.getStartBalance()).compareTo(this.getMutation()) != 0;
-    }
 
 }
