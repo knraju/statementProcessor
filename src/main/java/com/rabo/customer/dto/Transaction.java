@@ -11,20 +11,17 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class Transaction {
-    @NotNull(message = "Reference should not be null")
+    @NotNull
     private Long reference;
-    @NotNull(message = "accountNumber should not be null")
+    @NotNull
     private String accountNumber;
     private String description;
-    @NotNull(message = "startBalance should not be null")
+    @NotNull
     private BigDecimal startBalance;
-    @NotNull(message = "mutation should not be null")
+    @NotNull
     private BigDecimal mutation;
-    @NotNull(message = "endBalance should not be null")
+    @NotNull
     private BigDecimal endBalance;
-
 }

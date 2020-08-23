@@ -1,65 +1,60 @@
 package com.rabo.customer.handler;
 
-import com.rabo.customer.dto.RaboResponse;
+import com.rabo.customer.dto.CustomResponseEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Collections;
 
+/**
+ * This CustomResponseEntityExceptionHandler handles exceptions and return ResponseEntity with
+ * CustomResponseEntity and HttpStatus code.
+ *
+ * @author Nagaraju Kommineni
+ */
 @ControllerAdvice
 public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final Logger LOGGER= LoggerFactory.getLogger(CustomResponseEntityExceptionHandler.class);
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        return this.handleCustomException(ex);
+
+    /**
+     * @param exception
+     * @return ResponseEntity
+     */
+    @ExceptionHandler(InvalidTransactionException.class)
+    public final ResponseEntity<CustomResponseEntity> handleInvalidTransactionException(InvalidTransactionException exception) {
+        LOGGER.error("handleInvalidTransactionException");
+        return new ResponseEntity<>(exception.getCustomResponseEntity(), HttpStatus.OK);
     }
 
-    public ResponseEntity<Object> handleCustomException (MethodArgumentNotValidException ex) {
-        LOGGER.error("handleMethodArgumentNotValid");
-        BindingResult result = ex.getBindingResult();
-        List<FieldError> fieldErrors = result.getFieldErrors();
-        String error = fieldErrors.stream().map(FieldError::getDefaultMessage).collect(Collectors.joining(","));
-        LOGGER.error(error);
-        RaboResponse response = new RaboResponse();
-        response.setResult(ResultCodes.BAD_REQUEST);
-        return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
-    }
-
+    /**
+     * @param exception
+     * @return ResponseEntity
+     */
     @ExceptionHandler(ConstraintViolationException.class)
-    public final ResponseEntity<RaboResponse> handleConstraintViolationException(ConstraintViolationException exception, WebRequest request) {
+    public final ResponseEntity<CustomResponseEntity> handleConstraintViolationException(ConstraintViolationException exception) {
         LOGGER.error("handleConstraintViolationException");
-        Set<ConstraintViolation<?>> constraintViolations = exception.getConstraintViolations();
-        String error = constraintViolations.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(","));
-        LOGGER.error(error);
-        RaboResponse response = new RaboResponse();
-        response.setResult(ResultCodes.BAD_REQUEST);
+        CustomResponseEntity response = new CustomResponseEntity(ResultCodes.BAD_REQUEST, Collections.EMPTY_LIST);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(TransactionException.class)
-    public final ResponseEntity<RaboResponse> handleTransactionException(TransactionException exception, WebRequest request) {
-        return new ResponseEntity<>(exception.getRaboResponse(), HttpStatus.OK);
-    }
-
+    /**
+     * @param exception
+     * @return ResponseEntity
+     */
     @ExceptionHandler(Exception.class)
-    public final ResponseEntity<RaboResponse> handleUnCheckedException(Exception exception, WebRequest request) {
-        RaboResponse response = new RaboResponse();
+    public final ResponseEntity<CustomResponseEntity> handleGenaricException(Exception exception) {
+        LOGGER.error("handleCheckedAndUnCheckedException");
+        CustomResponseEntity response = new CustomResponseEntity();
         response.setResult(ResultCodes.INTERNAL_SERVER_ERROR);
+        response.setErrorRecords(Collections.emptyList());
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

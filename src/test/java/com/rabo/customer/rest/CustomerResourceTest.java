@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class StatementProcessorResourceTest {
+public class CustomerResourceTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -38,9 +38,14 @@ public class StatementProcessorResourceTest {
     @Value("${duplicate_incorrect_transactions}")
     private String duplicateIncorrectBalanceTransactions;
 
+    @Value("${invalid_transaction}")
+    private String invalidTransaction;
+
+    private static final String urlTemplate = "/statement/processor";
+
     @Test
     public void successTransaction() throws Exception {
-        mockMvc.perform(post("/statement/processor")
+        mockMvc.perform(post(urlTemplate)
                 .content(successTransaction)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -48,9 +53,9 @@ public class StatementProcessorResourceTest {
                 .andExpect(jsonPath("$.result", is(ResultCodes.SUCCESSFUL.toString())));
     }
 
-    /*@Test
+    @Test
     public void duplicateRefecesTransaction() throws Exception {
-        mockMvc.perform(post("/statement/processor")
+        mockMvc.perform(post(urlTemplate)
                 .content(duplicateReferenceTransactions)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -60,7 +65,7 @@ public class StatementProcessorResourceTest {
 
     @Test
     public void inCorrectEndBalanceTransaction() throws Exception {
-        mockMvc.perform(post("/statement/processor")
+        mockMvc.perform(post(urlTemplate)
                 .content(incorrectEndBalanceTransactions)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -70,11 +75,21 @@ public class StatementProcessorResourceTest {
 
     @Test
     public void duplicateInCorrectEndBalanceTransaction() throws Exception {
-        mockMvc.perform(post("/statement/processor")
+        mockMvc.perform(post(urlTemplate)
                 .content(duplicateIncorrectBalanceTransactions)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", is(ResultCodes.DUPLICATE_REFERENCE_INCORRECT_END_BALANCE.toString())));
-    }*/
+    }
+
+    @Test
+    public void badInvalidTransaction() throws Exception {
+        mockMvc.perform(post(urlTemplate)
+                .content(invalidTransaction)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.result", is(ResultCodes.BAD_REQUEST.toString())));
+    }
 }

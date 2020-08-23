@@ -10,9 +10,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.rabo.customer</groupId>
-    <artifactId>statementProcessor</artifactId>
+    <artifactId>customer</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>statementProcessor</name>
+    <name>customer</name>
 
 
     <properties>
@@ -81,7 +81,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.rabo.customer.StatementProcessorApplication</mainClass>
+                    <mainClass>com.rabo.customer.CustomerApplication</mainClass>
                 </configuration>
             </plugin>
             <plugin>

@@ -1,7 +1,7 @@
 package com.rabo.customer.rest;
 
 
-import com.rabo.customer.dto.RaboResponse;
+import com.rabo.customer.dto.CustomResponseEntity;
 import com.rabo.customer.dto.Transaction;
 import com.rabo.customer.service.StatementService;
 import org.slf4j.Logger;
@@ -19,26 +19,27 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
+/**
+ * @author Nagaraju Kommineni
+ */
 @RestController
 @Validated
-@RequestMapping("/statement")
-public class StatementProcessorResource {
+public class CustomerResource {
 
-	private static final Logger LOGGER= LoggerFactory.getLogger(StatementProcessorResource.class);
+	private static final Logger LOGGER= LoggerFactory.getLogger(CustomerResource.class);
 	
 	@Autowired
 	private StatementService statementService;
 
-	@PostMapping(value = "/processor")
+	/**
+	 * @param transactions the list of transactions
+	 * @return ResponseEntity
+	 */
+	@PostMapping(value = "/statement/processor")
 	public ResponseEntity validateTransactions(@RequestBody @Valid @NotEmpty List<Transaction> transactions) {
-		LOGGER.info("Begin StatementProcessorResource validateTransactions");
-		LOGGER.info("Total transactions : {}", transactions.size());
-		RaboResponse response = statementService.processTransactions(transactions);
-		LOGGER.info("End StatementProcessorResource validateTransactions");
+		LOGGER.info("Begin CustomerResource validateTransactions");
+		CustomResponseEntity response = statementService.processTransactions(transactions);
+		LOGGER.info("End CustomerResource validateTransactions");
         return new ResponseEntity(response, HttpStatus.OK);
 	}
-
-
-
-
 }

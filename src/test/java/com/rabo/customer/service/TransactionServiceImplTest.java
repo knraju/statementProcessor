@@ -2,9 +2,9 @@ package com.rabo.customer.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rabo.customer.dto.RaboResponse;
+import com.rabo.customer.dto.CustomResponseEntity;
 import com.rabo.customer.dto.Transaction;
-import com.rabo.customer.handler.TransactionException;
+import com.rabo.customer.handler.InvalidTransactionException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +24,6 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-//@RunWith(MockitoJUnitRunner.class)
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class TransactionServiceImplTest {
@@ -53,38 +52,38 @@ public class TransactionServiceImplTest {
 	@Test
 	public void testSuccessProcessTransactions() throws JsonProcessingException {
 		List<Transaction> transactions = Arrays.asList(mapper.readValue(successTransaction, Transaction[].class));
-		RaboResponse response = statementService.processTransactions(transactions);
+		CustomResponseEntity response = statementService.processTransactions(transactions);
 		assertEquals(SUCCESSFUL ,response.getResult());
 	}
 
 	@Test
-	public void testDuplicateReferenceTransactions() throws TransactionException, JsonProcessingException {
+	public void testDuplicateReferenceTransactions() throws InvalidTransactionException, JsonProcessingException {
 		List<Transaction> transactions = Arrays.asList(mapper.readValue(duplicateReferenceTransactions, Transaction[].class));
 		try {
 			statementService.processTransactions(transactions);
-		} catch (TransactionException te) {
-			assertThat(te.getRaboResponse().getResult(), is(DUPLICATE_REFERENCE));
+		} catch (InvalidTransactionException te) {
+			assertThat(te.getCustomResponseEntity().getResult(), is(DUPLICATE_REFERENCE));
 		}
 	}
 
 	@Test
-	public void testInCorrectEndBalanceTransaction() throws TransactionException, JsonProcessingException {
+	public void testInCorrectEndBalanceTransaction() throws InvalidTransactionException, JsonProcessingException {
 		List<Transaction> transactions = Arrays.asList(mapper.readValue(incorrectEndBalanceTransactions, Transaction[].class));
 		try {
 			statementService.processTransactions(transactions);
-		} catch (TransactionException te) {
-			assertThat(te.getRaboResponse().getResult(), is(INCORRECT_END_BALANCE));
+		} catch (InvalidTransactionException te) {
+			assertThat(te.getCustomResponseEntity().getResult(), is(INCORRECT_END_BALANCE));
 		}
 
 	}
 
 	@Test
-	public void testDuplicateInCorrectEndBalanceTransaction() throws TransactionException, JsonProcessingException {
+	public void testDuplicateInCorrectEndBalanceTransaction() throws InvalidTransactionException, JsonProcessingException {
 		List<Transaction> transactions = Arrays.asList(mapper.readValue(duplicateIncorrectBalanceTransactions, Transaction[].class));
 		try {
 			statementService.processTransactions(transactions);
-		} catch (TransactionException te) {
-			assertThat(te.getRaboResponse().getResult(), is(DUPLICATE_REFERENCE_INCORRECT_END_BALANCE));
+		} catch (InvalidTransactionException te) {
+			assertThat(te.getCustomResponseEntity().getResult(), is(DUPLICATE_REFERENCE_INCORRECT_END_BALANCE));
 		}
 
 	}

@@ -1,9 +1,5 @@
-# Customer Statement Validation
-   
-
-### statementProcessor
+# Customer
 The code implementing the logic for validating the customer transactions. The following technologies are in use for coding and hosting of the application:
-
 * Spring boot
 * Maven
 * Java
@@ -15,7 +11,7 @@ This is maven project and the configuration is in the `pom.xml` file.
     * Install Java 8 locally from [oracle.com](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html).
 	* Install Maven; instructions can be found at [maven.apache.org](https://maven.apache.org/install.html)
 		
-* Once your local environment is properly configured, navigate to `statementProcessor`, then build the project by running the following command in your local terminal. 
+* Once your local environment is properly configured, navigate to `customer`, then build the project by running the following command in your local terminal.
 			 
 	    $mvn install
 		  
@@ -23,7 +19,7 @@ This is maven project and the configuration is in the `pom.xml` file.
 			
 		$mvn spring-boot:run
 				or
-		$java -jar target/statementProcessor-1.0-SNAPSHOT.jar
+		$java -jar target/customer-1.0-SNAPSHOT.jar
 			
 ## API Documentation
 All API endpoints information provided by Swagger from [ localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)

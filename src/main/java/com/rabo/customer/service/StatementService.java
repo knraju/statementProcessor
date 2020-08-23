@@ -1,13 +1,16 @@
 package com.rabo.customer.service;
 
 
-import com.rabo.customer.dto.RaboResponse;
+import com.rabo.customer.dto.CustomResponseEntity;
 import com.rabo.customer.dto.Transaction;
 
 import java.util.List;
 
+/**
+ * @author Nagaraju Kommineni
+ */
 public interface StatementService {
 
-	RaboResponse processTransactions(List<Transaction> transactions);
+	CustomResponseEntity processTransactions(List<Transaction> transactions);
 
 }
